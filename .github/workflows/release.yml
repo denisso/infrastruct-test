@@ -98,6 +98,6 @@ jobs:
         with:
           tag_name: ${{ github.ref_name }}
           upload_url: ${{ steps.create_release.outputs.upload_url }} 
-          asset_path: ./my-artifact.zip
-          asset_name: my-artifact.zip
+          asset_path: ./dist/*
+          asset_name: Artifact
           asset_content_type: application/zip
