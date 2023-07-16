@@ -7,7 +7,7 @@ import { Home } from "./pages/Home";
 export const Application: FC = () => {
   const home = <Home />;
   const about = <About />;
-
+  console.log("hello")
   return (
     <div>
       <nav>
