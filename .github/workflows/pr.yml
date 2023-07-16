@@ -1,4 +1,5 @@
-name: "Verify pull request"
+name: "Автоматический запуск проверок в CI для пулл реквестов"
+# проверки должны запускаться автоматом на каждый коммит в PR
 on:
   pull_request:
 
@@ -9,58 +10,51 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
-        with:
-          fetch-depth: 0
-      - name: Setup Node
-        uses: actions/setup-node@v3
+      - name: Node
+        uses: actions/setup-node@v2
         with:
           node-version: "18.x"
-      - name: Install packages
+      - name: Packages
         run: npm ci
-      - name: Execute unit tests
+      - name: Run test
         run: npm run test-ci
-      - name: Save tests result
+      - name: Create artifact
         uses: actions/upload-artifact@v3
         with:
           name: unit-tests
-          path: "./test-report.html"
+          path: unit-tests/
+
   e2e-test:
-    name: e2e tests
+    name: Run unit tests
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v3
-        with:
-          fetch-depth: 0
-      - name: Setup Node
+      - name: Node
         uses: actions/setup-node@v2
         with:
           node-version: "18.x"
-      - name: Install packages
+      - name: Packages
         run: npm ci
-      - name: Install Playwright
-        run: npx playwright install --with-deps chromium
-      - name: Run e2e tests
+      - name: Run test
         run: npm run e2e
-      - name: Save tests result
+      - name: Create artifact
         uses: actions/upload-artifact@v3
         with:
           name: e2e-tests
-          path: playwright-report/
+          path: e2e-report/
 
   commit-lint:
-    name: Lint last commit message
+    name: Check commit CI
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v3
-        with:
-          fetch-depth: 0
-      - name: Setup Node
+      - name: Node
         uses: actions/setup-node@v2
         with:
           node-version: "18.x"
-      - name: Install packages
+      - name: Packages
         run: npm ci
-      - name: Run commit check
-        run: npx commitlint --from ${{ github.event.pull_request.head.sha }}~${{ github.event.pull_request.commits }} --to ${{ github.event.pull_request.head.sha }} --verbose
+      - name: Run check
+        run: npx commitlint --from ${{ github.event.pull_request.head.sha }} --to ${{ github.event.pull_request.head.sha }} --verbose
