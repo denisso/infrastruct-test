@@ -2,9 +2,6 @@ name: "Verify pull request"
 on:
   pull_request:
 
-  # Allows you to run this workflow manually from the Actions tab
-  workflow_dispatch:
-
 jobs:
   unit-tests:
     name: Run unit tests
@@ -50,6 +47,7 @@ jobs:
         with:
           name: e2e-tests
           path: playwright-report/
+
   commit-lint:
     name: Lint last commit message
     runs-on: ubuntu-latest
