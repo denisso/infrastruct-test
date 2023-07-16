@@ -11,7 +11,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
       - name: Node
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v3
         with:
           node-version: "18.x"
       - name: Packages
@@ -23,7 +23,6 @@ jobs:
         with:
           name: unit-tests
           path: unit-tests/
-
   e2e-test:
     name: Run unit tests
     runs-on: ubuntu-latest
@@ -31,7 +30,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
       - name: Node
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v3
         with:
           node-version: "18.x"
       - name: Packages
@@ -43,7 +42,6 @@ jobs:
         with:
           name: e2e-tests
           path: e2e-report/
-
   commit-lint:
     name: Check commit CI
     runs-on: ubuntu-latest
@@ -57,4 +55,4 @@ jobs:
       - name: Packages
         run: npm ci
       - name: Run check
-        run: npx commitlint --from ${{ github.event.pull_request.head.sha }} --to ${{ github.event.pull_request.head.sha }} --verbose
+        run: npx commitlint --from ${{ github.event.pull_request.head.sha }}~${{ github.event.pull_request.commits }} --to ${{ github.event.pull_request.head.sha }} --verbose
