@@ -61,55 +61,6 @@ jobs:
       - name: Build
         run: npm run build
 
-      # - name: Create Release
-      #   id: create_release
-      #   uses: actions/create-release@v1
-      #   env:
-      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      #   with:
-      #     tag_name: ${{ github.ref_name }}
-      #     release_name: Release ${{ github.ref_name }}
-      #     body: |
-      #       Тестовое описание релиза
-
-      # - name: Upload Artifact
-      #   uses: actions/upload-artifact@v2
-      #   with:
-      #     tag_name: ${{ github.ref_name }}
-      #     name: Artifact
-      #     path: ./dist
-
-      # - name: Publish Artifact
-      #   uses: actions/create-release@v1
-      #   env:
-      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      #   with:
-      #     tag_name: ${{ github.ref_name }}
-      #     upload_url: ${{ steps.create_release.outputs.upload_url }}
-      #     asset_path: ./dist/*
-      #     asset_name: Artifact
-      #     asset_content_type: application/zip
-
-      # - name: Upload Release Asset
-      #   id: upload-release-asset 
-      #   uses: actions/upload-release-asset@v1
-      #   env:
-      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      #   with:
-      #     tag_name: ${{ github.ref_name }}
-      #     upload_url: ${{ steps.create_release.outputs.upload_url }} 
-      #     asset_path: ./dist/*
-      #     asset_name: Artifact
-      #     asset_content_type: application/zip
-
-      - uses: actions/download-artifact@v3
-        with:
-          name: static-site
-          path: ./build
-
-      - name: Zip project
-        run: |
-          zip --junk-paths ./build
       - name: Create Release
         id: create_release
         uses: actions/create-release@v1
@@ -117,16 +68,47 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           tag_name: ${{ github.ref_name }}
-          release_name: Release ${{ github.ref }}
-          draft: false
-          prerelease: false
+          release_name: Release ${{ github.ref_name }}
+          body: |
+            Тестовое описание релиза ${{ github.ref_name }}
+
       - name: Upload Release Asset
-        id: upload-release-asset
+        id: upload-release-asset 
         uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./static-site.zip
-          asset_name: build.zip
+          tag_name: ${{ github.ref_name }}
+          upload_url: ${{ steps.create_release.outputs.upload_url }} 
+          asset_path: ./build/*
+          asset_name: Artifact
           asset_content_type: application/zip
+
+      # - uses: actions/download-artifact@v3
+      #   with:
+      #     name: static-site
+      #     path: ./build
+
+      # - name: Zip project
+      #   run: |
+      #     zip --junk-paths ./build
+      # - name: Create Release
+      #   id: create_release
+      #   uses: actions/create-release@v1
+      #   env:
+      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      #   with:
+      #     tag_name: ${{ github.ref_name }}
+      #     release_name: Release ${{ github.ref }}
+      #     draft: false
+      #     prerelease: false
+      # - name: Upload Release Asset
+      #   id: upload-release-asset
+      #   uses: actions/upload-release-asset@v1
+      #   env:
+      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      #   with:
+      #     upload_url: ${{ steps.create_release.outputs.upload_url }}
+      #     asset_path: ./static-site.zip
+      #     asset_name: build.zip
+      #     asset_content_type: application/zip
