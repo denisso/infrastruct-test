@@ -33,7 +33,7 @@ jobs:
           assignees: "${{ github.event.release.author.login }}"
           update_existing: true
           search_existing: all
-          filename: .github/templates/issue.md
+          filename: .github/issue.md
       - uses: izhangzhihao/delete-comment@master
         name: Delete previous comments
         with:
