@@ -1,0 +1,45 @@
+name: deploy-github-actions
+run-name: ${{ github.actor }} started the Deploy
+on: 
+  workflow_dispatch
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+jobs:
+  call-test-workflow:
+    name: Run tests
+    uses: ./.github/workflows/tests.yml
+
+  build-deploy:
+    needs: call-test-workflow
+    name: Build and deploy
+    runs-on: ubuntu-latest
+      
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+      - uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+        
+      - name: Install deps
+        run: npm ci
+    
+      - name: Build application
+        run: PUBLIC_URL="https://${github.actor}/${GITHUB_REPOSITORY}" npm run build
+        
+      - name: Deploy to GitHub Pages
+        id: deployment
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          npm i gh-pages
+          git remote set-url origin https://git:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git
+          npx gh-pages -d build -u "github-actions-bot <support+actions@github.com>"
+      
+
+          

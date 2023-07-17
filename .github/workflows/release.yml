@@ -1,4 +1,5 @@
 name: Release
+run-name: ${{ github.actor }} started the Release
 on:
   push:
     tags:
@@ -30,7 +31,7 @@ jobs:
           changelog: ${{ steps.changelog.outputs.clean_changelog }}
           tag: ${{ github.ref_name }}
         with:
-          assignees: "${{ github.event.release.author.login }}"
+          assignees: "${{ github.actor }}"
           update_existing: true
           search_existing: all
           filename: .github/workflows/issue.md

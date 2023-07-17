@@ -1,4 +1,5 @@
 name: 'Tests'
+run-name: ${{ github.actor }} is running Tests
 on: [push, pull_request, workflow_call]
 jobs:
   unit-tests:
