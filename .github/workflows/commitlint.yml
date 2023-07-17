@@ -1,4 +1,4 @@
-name: commitlint-github-actions
+name: Commitlint
 run-name: ${{ github.actor }} started the Lint
 on: [push, pull_request, workflow_call]
 jobs:

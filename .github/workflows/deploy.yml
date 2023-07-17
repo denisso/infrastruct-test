@@ -1,4 +1,4 @@
-name: deploy-github-actions
+name: Deploy
 run-name: ${{ github.actor }} started the Deploy
 on: 
   workflow_dispatch
