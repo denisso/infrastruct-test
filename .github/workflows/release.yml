@@ -24,6 +24,7 @@ jobs:
           skip-git-pull: "true"
           output-file: "false"
           version: ${{ github.ref_name }}
+          base: "main"
       - uses: JasonEtco/create-an-issue@v2.9.1
         name: Create an issue
         id: issue
